@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outdoor Exercise Planner — Seoul Air Quality</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="header-icon">🌤️</div>
+      <h1 class="app-title">Outdoor Exercise Planner</h1>
+      <p class="app-subtitle">Personalized exercise time recommendations based on Seoul air quality</p>
+    </header>
+
+    <main>
+      <form id="searchForm" class="card">
+        <div class="form-group">
+          <label for="district">District</label>
+          <select id="district" name="district" required>
+            <option value="">Select a district</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="exercise">Exercise Type</label>
+          <select id="exercise" name="exercise" required>
+            <option value="">Select an exercise type</option>
+            <option value="walking">Walking</option>
+            <option value="jogging">Jogging</option>
+            <option value="cycling">Cycling</option>
+            <option value="hiking">Hiking</option>
+            <option value="ball">Ball Sports</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+
+        <button type="submit" class="btn-primary" id="submitBtn">
+          <span class="btn-text">Get Recommendation</span>
+          <span class="btn-loading hidden">Loading…</span>
+        </button>
+      </form>
+
+      <div id="errorMsg" class="error-msg hidden"></div>
+    </main>
+  </div>
+
+  <script src="js/mock.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

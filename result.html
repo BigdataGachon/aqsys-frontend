@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recommendation — Outdoor Exercise Planner</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header app-header--result">
+      <button class="btn-back" onclick="window.location.href='index.html'">← Back</button>
+      <h1 class="app-title">Recommendation</h1>
+      <div id="metaInfo" class="meta-info"></div>
+    </header>
+
+    <main class="result-container">
+
+      <!-- 추천 요약 -->
+      <section id="summarySection" class="card"></section>
+
+      <!-- Traffic light timeline -->
+      <section class="card">
+        <h2 class="section-title">Hourly Air Quality (0–23h)</h2>
+        <div class="legend">
+          <span class="legend-item green">Good</span>
+          <span class="legend-item yellow">Caution</span>
+          <span class="legend-item red">Poor</span>
+        </div>
+        <div id="timeline" class="timeline-grid"></div>
+        <p class="timeline-note">★ Recommended hours / Hover over a cell to see PM values</p>
+      </section>
+
+      <!-- PM concentration chart -->
+      <section class="card">
+        <h2 class="section-title">PM Concentration Forecast (㎍/㎥)</h2>
+        <div class="chart-wrapper">
+          <canvas id="pmChart"></canvas>
+        </div>
+      </section>
+
+      <button class="btn-primary" onclick="window.location.href='index.html'">Search Again</button>
+    </main>
+  </div>
+
+  <script src="js/result.js"></script>
+</body>
+</html>
