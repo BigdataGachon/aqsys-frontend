@@ -1,28 +1,9 @@
-const USE_MOCK = true;
-const API_BASE = 'http://localhost:8000';
-
-const DISTRICTS = [
-  '강남구', '강동구', '강북구', '강서구', '관악구',
-  '광진구', '구로구', '금천구', '노원구', '도봉구',
-  '동대문구', '동작구', '마포구', '서대문구', '서초구',
-  '성동구', '성북구', '송파구', '양천구', '영등포구',
-  '용산구', '은평구', '종로구', '중구', '중랑구'
-];
+const USE_MOCK = false;
+const API_BASE = 'https://bigdata.studylink.click';
 
 function init() {
-  populateDistricts();
   setDateConstraints();
   document.getElementById('searchForm').addEventListener('submit', handleSubmit);
-}
-
-function populateDistricts() {
-  const select = document.getElementById('district');
-  DISTRICTS.forEach(name => {
-    const opt = document.createElement('option');
-    opt.value = name;
-    opt.textContent = name;
-    select.appendChild(opt);
-  });
 }
 
 function setDateConstraints() {
@@ -41,7 +22,6 @@ function toDateString(d) {
 
 async function handleSubmit(e) {
   e.preventDefault();
-  const district = document.getElementById('district').value;
   const exercise = document.getElementById('exercise').value;
   const date = document.getElementById('date').value;
 
@@ -50,8 +30,8 @@ async function handleSubmit(e) {
 
   try {
     const data = USE_MOCK
-      ? await getMockData(district, exercise, date)
-      : await fetchApi(district, exercise, date);
+      ? await getMockData(exercise, date)
+      : await fetchApi(exercise, date);
 
     sessionStorage.setItem('aqsys_result', JSON.stringify(data));
     window.location.href = 'result.html';
@@ -62,8 +42,8 @@ async function handleSubmit(e) {
   }
 }
 
-async function fetchApi(district, exercise, date) {
-  const params = new URLSearchParams({ district, exercise, date });
+async function fetchApi(exercise, date) {
+  const params = new URLSearchParams({ exercise, date });
   const res = await fetch(`${API_BASE}/api/recommend?${params}`);
   const json = await res.json();
   if (!res.ok) {
@@ -72,9 +52,9 @@ async function fetchApi(district, exercise, date) {
   return json;
 }
 
-async function getMockData(district, exercise, date) {
+async function getMockData(exercise, date) {
   await new Promise(r => setTimeout(r, 800));
-  return { ...MOCK_RESPONSE, district, exercise, date };
+  return { ...MOCK_RESPONSE, exercise, date };
 }
 
 function resolveErrorMessage(code) {

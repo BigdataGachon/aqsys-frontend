@@ -30,7 +30,7 @@ function renderMeta(data) {
   const el = document.getElementById('metaInfo');
   const exercise = EXERCISE_LABELS[data.exercise] || data.exercise;
   const dateStr = data.date.replace(/-/g, '.');
-  el.textContent = `${data.district} · ${exercise} · ${dateStr}`;
+  el.textContent = `서울시 · ${exercise} · ${dateStr}`;
 }
 
 function renderSummary(data) {

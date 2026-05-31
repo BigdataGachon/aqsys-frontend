@@ -1,5 +1,4 @@
 const MOCK_RESPONSE = {
-  district: "강남구",
   exercise: "jogging",
   date: "2026-05-19",
   generated_at: "2026-05-19T08:30:00+09:00",

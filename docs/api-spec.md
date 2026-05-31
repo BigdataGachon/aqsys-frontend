@@ -1,6 +1,6 @@
 # API Specification — 서울 대기질 야외운동 추천 서비스
 
-> 최종 수정: 2026-05-19  
+> 최종 수정: 2026-05-31  
 > 대상: 백엔드 개발자  
 > 프론트엔드 연동 소스: `js/main.js`, `js/result.js`
 
@@ -10,7 +10,7 @@
 
 | 항목 | 내용 |
 |---|---|
-| Base URL (개발) | `http://localhost:8000` |
+| Base URL | `https://bigdata.studylink.click` |
 | 프로토콜 | HTTP/1.1 이상 |
 | 데이터 형식 | `application/json` (요청·응답 모두) |
 | 인증 | 없음 |
@@ -43,28 +43,17 @@ Access-Control-Allow-Headers: Content-Type
 ### 3.1 Request
 
 ```
-GET /api/recommend?district=강남구&exercise=jogging&date=2026-05-19
+GET /api/recommend?exercise=jogging&date=2026-05-31
 ```
 
 #### 쿼리 파라미터
 
 | 파라미터 | 타입 | 필수 | 설명 |
 |---|---|---|---|
-| `district` | string | ✅ | 서울시 자치구 한글명 |
 | `exercise` | string | ✅ | 운동 종류 코드 (아래 허용값 참고) |
 | `date` | string | ✅ | 예측 날짜 (`YYYY-MM-DD`) |
 
-#### `district` 허용값 (25개)
-
-```
-강남구 강동구 강북구 강서구 관악구
-광진구 구로구 금천구 노원구 도봉구
-동대문구 동작구 마포구 서대문구 서초구
-성동구 성북구 송파구 양천구 영등포구
-용산구 은평구 종로구 중구 중랑구
-```
-
-이 목록 외의 값은 `400 INVALID_DISTRICT` 반환.
+> 서울시 전체를 단일 기준으로 예측하므로 `district` 파라미터 없음.
 
 #### `exercise` 허용값
 
@@ -92,7 +81,6 @@ GET /api/recommend?district=강남구&exercise=jogging&date=2026-05-19
 
 ```json
 {
-  "district": "강남구",
   "exercise": "jogging",
   "date": "2026-05-19",
   "generated_at": "2026-05-19T08:30:00+09:00",
@@ -133,7 +121,6 @@ GET /api/recommend?district=강남구&exercise=jogging&date=2026-05-19
 
 | 필드 | 타입 | 설명 |
 |---|---|---|
-| `district` | string | 요청 파라미터 echo |
 | `exercise` | string | 요청 파라미터 echo |
 | `date` | string | 요청 파라미터 echo (`YYYY-MM-DD`) |
 | `generated_at` | string | 예측 생성 시각 (ISO 8601, **반드시 KST `+09:00` 포함**) |
@@ -280,7 +267,6 @@ UI에 그대로 노출되는 문장이므로 자연스러운 한국어 문장으
 
 | HTTP 상태 | `error.code` | 발생 조건 | 프론트 표시 문구 |
 |---|---|---|---|
-| 400 | `INVALID_DISTRICT` | `district` 파라미터가 허용 목록에 없음 | "Please select a valid district." |
 | 400 | `INVALID_EXERCISE` | `exercise` 파라미터가 허용 목록에 없음 | "Please select a valid exercise type." |
 | 400 | `INVALID_DATE` | 날짜가 오늘·내일이 아니거나 형식 오류 | "Only today or tomorrow can be selected." |
 | 400 | `MISSING_PARAM` | 필수 파라미터 누락 | "An error occurred. Please try again." |
@@ -297,11 +283,11 @@ UI에 그대로 노출되는 문장이므로 자연스러운 한국어 문장으
 
 ### 전환 방법
 
-`js/main.js` 상단의 플래그 하나로 mock ↔ 실제 API 전환:
+`js/main.js` 상단의 플래그로 mock ↔ 실제 API 전환:
 
 ```javascript
-const USE_MOCK = true;  // false 로 변경하면 실제 API 호출
-const API_BASE = 'http://localhost:8000';
+const USE_MOCK = false;  // true 로 변경하면 mock 데이터 사용
+const API_BASE = 'https://bigdata.studylink.click';
 ```
 
 ### 프론트가 응답을 처리하는 방식
@@ -328,14 +314,11 @@ fetch('/api/recommend?...')
 
 ```bash
 # 정상 요청
-curl -s "http://localhost:8000/api/recommend?district=강남구&exercise=jogging&date=2026-05-19" | jq .
-
-# 잘못된 자치구
-curl -s "http://localhost:8000/api/recommend?district=없는구&exercise=jogging&date=2026-05-19" | jq .
+curl -s "https://bigdata.studylink.click/api/recommend?exercise=jogging&date=2026-05-31" | jq .
 
 # 허용되지 않는 날짜
-curl -s "http://localhost:8000/api/recommend?district=강남구&exercise=jogging&date=2026-01-01" | jq .
+curl -s "https://bigdata.studylink.click/api/recommend?exercise=jogging&date=2026-01-01" | jq .
 
 # 파라미터 누락
-curl -s "http://localhost:8000/api/recommend?district=강남구" | jq .
+curl -s "https://bigdata.studylink.click/api/recommend?exercise=jogging" | jq .
 ```
